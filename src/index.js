@@ -1,2 +1,11 @@
+import React from "react";
+import ReactDOM from "react-dom";
 
-console.log('hello world');
+import App from './components/app';
+
+
+
+ReactDOM.render(
+    <App />,
+    document.querySelector('#root')
+  );
