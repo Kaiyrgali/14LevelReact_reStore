@@ -23,7 +23,7 @@ class BookList extends Component {
   render() {
     const { books } = this.props; //массив книг
     return (
-      <ul>
+      <ul className="book-list">
         {
           books.map((book) => {
             return (
@@ -53,8 +53,8 @@ const mapDispatchToProps =
 export default compose(
 // compose просто переписали фцнкцию с целью разбить ее на два аргумента вместо вложенности
   withBookstoreService(),
-  connect(mapStateToProps, mapDispatchToProps)(BookList)
-);
+  connect(mapStateToProps, mapDispatchToProps)
+)(BookList);
 //  withBookstoreService()(
 //   connect(mapStateToProps, mapDispatchToProps)(BookList));
 
