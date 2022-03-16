@@ -7,6 +7,7 @@ import { connect } from "react-redux"; // функция высшего поря
 import { withBookstoreService } from "../hoc";
 import { booksLoaded } from "../../actions/actions";
 import { compose } from "../../utils";
+import Spinner from "../spinner"
 
 import './book-list.css'
 
@@ -14,14 +15,21 @@ class BookList extends Component {
 
   componentDidMount() { // вызывается после отрисовки в ДОМ дереве
     // 1. receive data
-    const { bookstoreService } = this.props;
-    const data = bookstoreService.getBooks();
-    console.log(data);
+    const { bookstoreService, booksLoaded } = this.props;
+    // const data = bookstoreService.getBooks();
+    // строку меняет, так как начали использовать промис
+    bookstoreService.getBooks()
+      .then((data) => booksLoaded(data))
+
     // 2. dispatch action to store
-    this.props.booksLoaded(data);
+    //this.props.booksLoaded(data);
+    // переносим наверх
   }
   render() {
-    const { books } = this.props; //массив книг
+    const { books, loading } = this.props; //массив книг
+    if (loading) {
+      return <Spinner />
+    }
     return (
       <ul className="book-list">
         {
@@ -36,7 +44,9 @@ class BookList extends Component {
   };
 };
 
-const mapStateToProps = (books) => books;
+const mapStateToProps = ({books, loading}) => {
+   return { books, loading };
+  }
 
 const mapDispatchToProps = 
 // (dispatch) => {
