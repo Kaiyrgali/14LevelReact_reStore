@@ -1,7 +1,8 @@
 import React from 'react';
 import { Provider } from "react-redux";
-import { BrowserRouter as Router } from "react-router-dom";
-import Main from '../pages/main';
+import { BrowserRouter as Router,  Route, Routes } from "react-router-dom";
+import HomePage from '../pages/home-page';
+import CartPage from '../pages/cart-page';
 import store from "../../store";
 import ErrorBoundry from '../../components/error-boundry';
 // import { withBookstoreService } from '../hoc'
@@ -17,7 +18,10 @@ const App = () => {
       <ErrorBoundry>
         <BookstoreServiceProvider value = {bookstoreService} >
           <Router> 
-            <Main />
+            <Routes>
+              <Route path = '/' element = {<HomePage />} />
+              <Route path = '*' element = {<CartPage />} />
+            </Routes>
           </Router>
         </BookstoreServiceProvider>
       </ErrorBoundry>

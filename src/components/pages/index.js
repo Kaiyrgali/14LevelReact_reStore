@@ -1,3 +1,7 @@
-import Main from "./main";
+import HomePage from "./home-page";
+import CartPage from "./cart-page";
 
-export default Main;
+export {
+  HomePage,
+  CartPage
+};

@@ -13,5 +13,4 @@ export default class BookstoreService {
         author: 'Michael T. Nygard' }, 
     ];
   }
-
 }
