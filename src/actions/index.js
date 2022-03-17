@@ -1,5 +1,5 @@
-import { booksLoaded } from "./actions";
+import { fetchBooks } from "./actions";
 
 export {
-  booksLoaded
+  fetchBooks
 };

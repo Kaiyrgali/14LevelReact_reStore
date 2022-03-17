@@ -23,7 +23,7 @@ const App = () => {
               <ShopHeader numItems={5} total={210} />
               <Routes>
                 <Route path = '/' element = {<HomePage />} />
-                <Route path = '*' element = {<CartPage />} />
+                <Route path = 'cart' element = {<CartPage />} />
               </Routes>
             </main>
           </Router>

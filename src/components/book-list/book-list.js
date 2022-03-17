@@ -5,51 +5,71 @@ import BookListItem from "../book-list-item";
 import { connect } from "react-redux"; // функция высшего порядка
 // import { bindActionCreators } from "redux"; // дополнительная вспомогательная функция, делает еще проще функцию диспатч
 import { withBookstoreService } from "../hoc";
-import { booksLoaded } from "../../actions/actions";
+// заменили на ФетчБукс import { booksLoaded, booksRequested, booksError } from "../../actions";
+import { fetchBooks } from "../../actions";
 import { compose } from "../../utils";
-import Spinner from "../spinner"
+import Spinner from "../spinner";
+import ErrorIndicator from '../error-indicator';
 
 import './book-list.css'
 
-class BookList extends Component {
+const BookList = ({ books }) => {
+  console.log('BookList')
+  return (
+    <ul className="book-list">
+      {
+        books.map((book) => {
+          return (
+            <li key={book.id}><BookListItem book={book} /></li> //возвращает новый массив из Лишек основанный на каждой книге за массива Букс
+          )
+        })
+      }
+    </ul>
+  );
+};
+
+// переименовали в БукЛист контейнер, чтобы рендеринг
+// финальный вывести в отдельный компонент class BookList extends Component {
+class BookListContainer extends Component {
 
   componentDidMount() { // вызывается после отрисовки в ДОМ дереве
     // 1. receive data
-    const { bookstoreService, booksLoaded } = this.props;
+    // const { bookstoreService, booksLoaded, booksRequested, booksError } = this.props;
+    // рефакторинг ДидМоунт, выводим все в одну функцию
+    this.props.fetchBooks();
     // const data = bookstoreService.getBooks();
     // строку меняет, так как начали использовать промис
-    bookstoreService.getBooks()
-      .then((data) => booksLoaded(data))
+    // booksRequested();
+    // bookstoreService.getBooks()
+    //   .then((data) => booksLoaded(data))
+    //   .catch((err) => booksError(err))
 
     // 2. dispatch action to store
     //this.props.booksLoaded(data);
     // переносим наверх
   }
   render() {
-    const { books, loading } = this.props; //массив книг
+    const { books, loading, error } = this.props; //массив книг
+    // console.log( error );
     if (loading) {
       return <Spinner />
-    }
-    return (
-      <ul className="book-list">
-        {
-          books.map((book) => {
-            return (
-              <li key={book.id}><BookListItem book={book} /></li> //возвращает новый массив из Лишек основанный на каждой книге за массива Букс
-            )
-          })
-        }
-      </ul>
-    );
+    } 
+    if (error) {
+      // console.log('Error');
+      return <ErrorIndicator />
+    }  
+
+    return <BookList books = {books} />
+// создаем отдельно БукЛист, который оборачиваем в БукЛистКонтейнер
+
   };
 };
 
-const mapStateToProps = ({books, loading}) => {
-   return { books, loading };
+const mapStateToProps = ({books, loading, error}) => {
+   return { books, loading, error };
   }
 
-const mapDispatchToProps = 
-// (dispatch) => {
+const mapDispatchToProps = (dispatch, { bookstoreService }) => {
   // return {
     // booksLoaded: (newBooks) =>
     //   dispatch(booksLoaded(newBooks))
@@ -58,13 +78,26 @@ const mapDispatchToProps =
   //   booksLoaded
   // }, dispatch);
   // и это затем упростили благодаря и убрали booksActionCreators до ...
-  {booksLoaded};
+  // {booksLoaded,
+  // booksRequested, 
+  // booksError}
+  // и это потом переделали в отдельную функцию Фетч
+  // const { bookstoreService } = ownProps;
+  return {
+    fetchBooks: fetchBooks(bookstoreService, dispatch)
+    // вынесли в актионс fetchBooks: () => {
+    //   dispatch(booksRequested());
+    //   bookstoreService.getBooks()
+    //     .then((data) => dispatch(booksLoaded(data)))
+    //     .catch((err) => dispatch(booksError(err)))
+    };
+  };
 
 export default compose(
 // compose просто переписали фцнкцию с целью разбить ее на два аргумента вместо вложенности
   withBookstoreService(),
   connect(mapStateToProps, mapDispatchToProps)
-)(BookList);
+)(BookListContainer);
 //  withBookstoreService()(
 //   connect(mapStateToProps, mapDispatchToProps)(BookList));
 
