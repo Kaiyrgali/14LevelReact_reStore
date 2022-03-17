@@ -32,14 +32,21 @@ export const countAddedToCart = (bookId) => {
   };
 };
 
-
-
-export const bookDelFromCart = (bookId) => {
+export const countDeletedFromCart = (bookId) => {
   return {
-    type: 'BOOK_DELETED_FROM_CART',
+    type: 'COUNT_DELETED_FROM_CART',
     payload: bookId
   };
 };
+
+export const bookDeletedFromCart = (bookId) => {
+  return {
+    type: 'BOOK_ERASED_FROM_CART',
+    payload: bookId
+  };
+};
+
+
 
 const fetchBooks = (bookstoreService, dispatch) => () => { //функция, которая возвращает функцию, внешняя для - работы в МатчДиспТоПропс, внутренняя для -компонента -
   dispatch(booksRequested());

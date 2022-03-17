@@ -40,8 +40,7 @@ const reducer = (state = initialState, action) => {
         name: book.title,
         count: 1,
         total: book.price
-      };
-            
+      };      
       return {
         ...state,
         cartItems: [
@@ -52,7 +51,7 @@ const reducer = (state = initialState, action) => {
 
     case 'COUNT_ADDED_TO_CART':
       const addBookId = action.payload;
-      const bookPrice = state.books.find((book) => book.id === addBookId).price;
+      const addBookPrice = state.books.find((book) => book.id === addBookId).price;
       const cart= state.cartItems.find((book) => book.id === addBookId);
       // console.log(bookPrice);
       console.log(cart);
@@ -60,32 +59,47 @@ const reducer = (state = initialState, action) => {
         id: cart.id,
         name: cart.name,
         count: cart.count + 1,
-        total: cart.total + bookPrice
+        total: cart.total + addBookPrice
         };
-      console.log(addBookId, state.cartItems[0] )
       state.cartItems.splice(addBookId-1, 1, addCount)     
-        return {
-          ...state,
-        cartItems: [
-          ...state.cartItems
-        ]
-        };
-  
-
-      case 'BOOK_DELETED_FROM_CART':
-      const bookDelId = action.payload;
-      console.log(bookDelId);
-      const bookDel = state.books.find((items) => items.id === bookDelId);
-      const delItem = {
-      };
-              
       return {
         ...state,
-        cartItems: []
+        cartItems: [
+        ...state.cartItems
+        ]
+      };
+  
+    case 'COUNT_DELETED_FROM_CART':
+      const delBookId = action.payload;
+      const delBookPrice = state.books.find((book) => book.id === delBookId).price;
+      const delCart= state.cartItems.find((book) => book.id === delBookId);
+      const delCount = {
+        id: delCart.id,
+        name: delCart.name,
+        count: ((delCart.count>0) ? delCart.count - 1 : 0),
+        total: ((delCart.total>0) ? delCart.total - delBookPrice: 0)
+        };
+      state.cartItems.splice(delBookId-1, 1, delCount)     
+      return {
+        ...state,
+        cartItems: [
+        ...state.cartItems
+        ]
       };
 
-    default:
-      return state;
+      case 'BOOK_ERASED_FROM_CART':
+        const erasedBookId = action.payload;
+        console.log(state.cartItems);
+        const erasedCart= state.cartItems.findIndex((book) => book.id === erasedBookId);
+        state.cartItems.splice(erasedCart, 1);    
+        return {
+          ...state,
+          cartItems: 
+          ((state.cartItems.length>0 ) ? [...state.cartItems] : [])
+          };
+      
+      default:
+        return state;
   };
 };
 

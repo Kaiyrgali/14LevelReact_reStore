@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { countAddedToCart, bookDelFromCart } from '../../actions';
+import { countAddedToCart, countDeletedFromCart, bookDeletedFromCart } from '../../actions';
 import './shopping-cart-table.css';
 
 const ShoppingCartTable = ({ items, total, onIncrease, onDecrease, onDelete }) => {
@@ -75,11 +75,12 @@ const mapDispatchToProps = (dispatch, { bookstoreService }) => {
 
     onDecrease: (id) => {
       console.log(`Decrease ${id}`);
-      dispatch(bookDelFromCart(id))
+      dispatch(countDeletedFromCart(id))
     },
 
     onDelete: (id) => {
       console.log(`Delete ${id}`);
+      dispatch(bookDeletedFromCart(id))
     }
   }
 };
