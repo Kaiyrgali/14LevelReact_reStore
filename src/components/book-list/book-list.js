@@ -6,21 +6,25 @@ import { connect } from "react-redux"; // функция высшего поря
 // import { bindActionCreators } from "redux"; // дополнительная вспомогательная функция, делает еще проще функцию диспатч
 import { withBookstoreService } from "../hoc";
 // заменили на ФетчБукс import { booksLoaded, booksRequested, booksError } from "../../actions";
-import { fetchBooks } from "../../actions";
+import { fetchBooks, bookAddedToCart } from "../../actions";
 import { compose } from "../../utils";
 import Spinner from "../spinner";
 import ErrorIndicator from '../error-indicator';
 
 import './book-list.css'
 
-const BookList = ({ books }) => {
+const BookList = ({ books, onAddedToCart }) => {
   console.log('BookList')
   return (
     <ul className="book-list">
       {
         books.map((book) => {
           return (
-            <li key={book.id}><BookListItem book={book} /></li> //возвращает новый массив из Лишек основанный на каждой книге за массива Букс
+            <li key={book.id}>
+              <BookListItem
+                book={book}
+                onAddedToCart={() => onAddedToCart(book.id)} />
+            </li> //возвращает новый массив из Лишек основанный на каждой книге за массива Букс
           )
         })
       }
@@ -49,7 +53,7 @@ class BookListContainer extends Component {
     // переносим наверх
   }
   render() {
-    const { books, loading, error } = this.props; //массив книг
+    const { books, loading, error, onAddedToCart } = this.props; //массив книг
     // console.log( error );
     if (loading) {
       return <Spinner />
@@ -59,7 +63,10 @@ class BookListContainer extends Component {
       return <ErrorIndicator />
     }  
 
-    return <BookList books = {books} />
+    return <BookList
+              books = {books}
+              onAddedToCart = {onAddedToCart}
+     />
 // создаем отдельно БукЛист, который оборачиваем в БукЛистКонтейнер
 
   };
@@ -84,12 +91,16 @@ const mapDispatchToProps = (dispatch, { bookstoreService }) => {
   // и это потом переделали в отдельную функцию Фетч
   // const { bookstoreService } = ownProps;
   return {
-    fetchBooks: fetchBooks(bookstoreService, dispatch)
+    fetchBooks: fetchBooks(bookstoreService, dispatch),
     // вынесли в актионс fetchBooks: () => {
     //   dispatch(booksRequested());
     //   bookstoreService.getBooks()
     //     .then((data) => dispatch(booksLoaded(data)))
     //     .catch((err) => dispatch(booksError(err)))
+    // onAddedToCart: (id) => {
+    //   console.log('Added to cart', id)
+    // }
+    onAddedToCart: (id) => dispatch(bookAddedToCart(id))
     };
   };
 
