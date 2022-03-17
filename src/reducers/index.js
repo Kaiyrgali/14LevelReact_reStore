@@ -41,13 +41,47 @@ const reducer = (state = initialState, action) => {
         count: 1,
         total: book.price
       };
-      
+            
       return {
         ...state,
         cartItems: [
           ...state.cartItems,
           newItem
         ]
+      };
+
+    case 'COUNT_ADDED_TO_CART':
+      const addBookId = action.payload;
+      const bookPrice = state.books.find((book) => book.id === addBookId).price;
+      const cart= state.cartItems.find((book) => book.id === addBookId);
+      // console.log(bookPrice);
+      console.log(cart);
+      const addCount = {
+        id: cart.id,
+        name: cart.name,
+        count: cart.count + 1,
+        total: cart.total + bookPrice
+        };
+      console.log(addBookId, state.cartItems[0] )
+      state.cartItems.splice(addBookId-1, 1, addCount)     
+        return {
+          ...state,
+        cartItems: [
+          ...state.cartItems
+        ]
+        };
+  
+
+      case 'BOOK_DELETED_FROM_CART':
+      const bookDelId = action.payload;
+      console.log(bookDelId);
+      const bookDel = state.books.find((items) => items.id === bookDelId);
+      const delItem = {
+      };
+              
+      return {
+        ...state,
+        cartItems: []
       };
 
     default:

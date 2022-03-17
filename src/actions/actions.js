@@ -25,6 +25,22 @@ export const bookAddedToCart = (bookId) => {
   };
 };
 
+export const countAddedToCart = (bookId) => {
+  return {
+    type: 'COUNT_ADDED_TO_CART',
+    payload: bookId
+  };
+};
+
+
+
+export const bookDelFromCart = (bookId) => {
+  return {
+    type: 'BOOK_DELETED_FROM_CART',
+    payload: bookId
+  };
+};
+
 const fetchBooks = (bookstoreService, dispatch) => () => { //функция, которая возвращает функцию, внешняя для - работы в МатчДиспТоПропс, внутренняя для -компонента -
   dispatch(booksRequested());
   bookstoreService.getBooks()
