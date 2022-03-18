@@ -1,6 +1,7 @@
 // Так как есть компоненты жизненного цикла, то лучше делать Компонентом Класса
 // Создает список Лишек из книг
 import React, { Component } from "react";
+import { bindActionCreators } from "redux";
 import BookListItem from "../book-list-item";
 import { connect } from "react-redux"; // функция высшего порядка
 // import { bindActionCreators } from "redux"; // дополнительная вспомогательная функция, делает еще проще функцию диспатч
@@ -90,8 +91,12 @@ const mapDispatchToProps = (dispatch, { bookstoreService }) => {
   // booksError}
   // и это потом переделали в отдельную функцию Фетч
   // const { bookstoreService } = ownProps;
-  return {
-    fetchBooks: fetchBooks(bookstoreService, dispatch),
+  return bindActionCreators({
+    // первый вариант fetchBooks: fetchBooks(bookstoreService, dispatch),
+    // второй вариант после thunk - fetchBooks: () => dispatch(fetchBooks(bookstoreService)()),
+    // третий вариант после БайнАкшинКреатор
+      fetchBooks: fetchBooks(bookstoreService),
+    onAddedToCart: bookAddedToCart
     // вынесли в актионс fetchBooks: () => {
     //   dispatch(booksRequested());
     //   bookstoreService.getBooks()
@@ -100,8 +105,8 @@ const mapDispatchToProps = (dispatch, { bookstoreService }) => {
     // onAddedToCart: (id) => {
     //   console.log('Added to cart', id)
     // }
-    onAddedToCart: (id) => dispatch(bookAddedToCart(id))
-    };
+    // onAddedToCart: (id) => dispatch(bookAddedToCart(id))
+    }, dispatch);
   };
 
 export default compose(
