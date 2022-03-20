@@ -1,10 +1,7 @@
-import React from "react";
-import './cart-page.css'
+import React from 'react';
 
-const CartPage = ({ bookstoreService }) => {
-  // console.log(bookstoreService.getBooks())
-  return <div>CartPage</div>
-};
+function CartPage({ bookstoreService }) {
+  return <div>CartPage</div>;
+}
 
-// export default withBookstoreService()(Main);
 export default CartPage;

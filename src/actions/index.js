@@ -1,5 +1,7 @@
-import { fetchBooks, bookAddedToCart, bookRemovedFromCart, allBooksRemovedFromCart } from "./actions";
+import {
+  fetchBooks, bookAddedToCart, bookRemovedFromCart, allBooksRemovedFromCart,
+} from './actions';
 
 export {
-  fetchBooks, bookAddedToCart, bookRemovedFromCart, allBooksRemovedFromCart
+  fetchBooks, bookAddedToCart, bookRemovedFromCart, allBooksRemovedFromCart,
 };

@@ -1,3 +1,3 @@
-import compose from "./compose";
+import compose from './compose';
 
-export {compose};
+export { compose };
